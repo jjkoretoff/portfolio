@@ -7,25 +7,41 @@ head(pxd)
 tail(pxd)
 class(pxd)
 
+#format for chart
+pxd_chart_format <- Quandl("GOOG/NYSE_PXD", api_key="xPN8SdVKiNG7LAACxgfA",
+                           type = "xts", start_date = "2015-08-27", 
+                           end_date = "2016-05-03")
+
+#chart dataset
+pxd_chart <- candleChart(pxd_chart_format)
+
 #pull the desired pricing data
-pxd_close <- pxd[, "Close", drop = FALSE]
+pxd_close <- Quandl("GOOG/NYSE_PXD", api_key="xPN8SdVKiNG7LAACxgfA", 
+                    column_index = 4)
 
 #inspect head
 head(pxd_close)
 
-#create a new dataframe with dates and closing prices
-rownames(pxd_close) <- pxd$Date
+#calculate simple returns
+pxd_daily_returns <- Quandl("GOOG/NYSE_PXD", api_key="xPN8SdVKiNG7LAACxgfA", 
+                          column_index = 4, transform = c("rdiff"), 
+                          collapse = ("daily"))
+head(pxd_daily_returns)
 
-#inspect head
-head(pxd_close)
+pxd_weekly_returns <- Quandl("GOOG/NYSE_PXD", api_key="xPN8SdVKiNG7LAACxgfA",
+                           column_index = 4, transform = c("rdiff"), 
+                           collapse = ("weekly"))
+head(pxd_weekly_returns)
 
-#subset the data
-price_c <- pxd_close["2016-05-02",]
-price_c      
-price_h <- pxd_close["2016-04-25",]
-price_h
+pxd_monthly_returns <- Quandl("GOOG/NYSE_PXD", api_key="xPN8SdVKiNG7LAACxgfA",
+                              column_index = 4,transform = c("rdiff"), 
+                              collapse = ("monthly"))
+head(pxd_monthly_returns)
 
-#plot data
-plot(pxd$Close, type = "l", col = "blue", lwd = 2, ylab = "Close", 
-     main = "Daily Closing Price of PXD", xlim = c(4000, 1))
+pxd_quarterly_returns <- Quandl("GOOG/NYSE_PXD", api_key="xPN8SdVKiNG7LAACxgfA",
+                                column_index = 4, transform = c("rdiff"), 
+                                collapse = ("quarterly"))
+head(pxd_quarterly_returns)
+
+
 
